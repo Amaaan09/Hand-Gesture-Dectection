@@ -1,12 +1,9 @@
-# TechVidvan hand Gesture Recognizer
-
-# import necessary packages
-
 import cv2
 import numpy as np
 import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+import streamlit as st
 
 # initialize mediapipe
 mpHands = mp.solutions.hands
@@ -23,8 +20,19 @@ f.close()
 print(classNames)
 
 
-# Initialize the webcam
-cap = cv2.VideoCapture(0)
+st.title("Face Recognition on Video using Streamlit")
+
+# Create a file uploader with specific file type
+file = st.file_uploader("Upload video", type=["mp4", "mov", "avi"])
+
+# Display the video and face recognition results if a file is uploaded
+if file is not None:
+    # Read the contents of the file as bytes
+    video_bytes = file.read()
+
+    # Initialize the OpenCV video capture object
+    cap = cv2.VideoCapture(video_bytes)
+
 
 while True:
     # Read each frame from the webcam
