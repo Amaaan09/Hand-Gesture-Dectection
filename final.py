@@ -41,10 +41,9 @@ if file is not None:
     # Create a VideoCapture object from the temporary file
     cap = cv2.VideoCapture("temp.mp4")
 
-# cap = cv2.VideoCapture(file)
-
 if file is None:
     st.write("Please upload a video file")
+    pass
 
 while True:
     # Read each frame from the webcam
