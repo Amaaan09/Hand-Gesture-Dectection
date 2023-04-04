@@ -25,13 +25,15 @@ st.title("Face Recognition on Video using Streamlit")
 # Create a file uploader with specific file type
 file = st.file_uploader("Upload video", type=["mp4", "mov", "avi"])
 
-# Display the video and face recognition results if a file is uploaded
-if file is not None:
-    # Read the contents of the file as bytes
-    video_bytes = file.read()
+# # Display the video and face recognition results if a file is uploaded
+# if file is not None:
+#     # Read the contents of the file as bytes
+#     video_bytes = file.read()
 
-    # Initialize the OpenCV video capture object
-    cap = cv2.VideoCapture(video_bytes)
+#     # Initialize the OpenCV video capture object
+#     cap = cv2.VideoCapture(video_bytes)
+
+cap = cv2.VideoCapture(file)
 
 
 while True:
