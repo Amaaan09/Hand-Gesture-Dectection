@@ -1,3 +1,6 @@
+import os
+os.environ["QT_QPA_PLATFORM"] = "pyside2"
+
 import cv2
 import numpy as np
 import mediapipe as mp
