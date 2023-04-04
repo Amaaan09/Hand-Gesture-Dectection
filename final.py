@@ -30,11 +30,18 @@ if file is not None:
     # Read the contents of the file as bytes
     video_bytes = file.read()
 
-    # Initialize the OpenCV video capture object
-    cap = cv2.VideoCapture(video_bytes)
+    # Create a temporary file and write the contents of the uploaded file to it
+    with st.spinner('Saving file...'):
+        with open("temp.mp4", "wb") as f:
+            f.write(video_bytes)
+
+    # Create a VideoCapture object from the temporary file
+    cap = cv2.VideoCapture("temp.mp4")
 
 # cap = cv2.VideoCapture(file)
 
+if file is None:
+    st.write("Please upload a video file")
 
 while True:
     # Read each frame from the webcam
