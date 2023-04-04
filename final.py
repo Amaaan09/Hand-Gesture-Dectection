@@ -1,5 +1,6 @@
 import os
 os.environ["QT_QPA_PLATFORM"] = "pyside2"
+os.environ["QT_PLUGIN_PATH"] = "C:/Users/mamaa/AppData/Local/Programs/Python/Python310/lib/site-packages/PySide2/plugins"
 
 import cv2
 import numpy as np
