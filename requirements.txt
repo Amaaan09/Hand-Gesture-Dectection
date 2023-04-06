@@ -1,5 +1,1 @@
 opencv-python
-numpy
-mediapipe
-tensorflow
-pyside2
