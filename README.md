@@ -23,6 +23,11 @@ OK sign: Start the media.
 
 Stop Sign: Stop the media.
 
+Thumb and Pinky: place a call
+
+Yo Sign: play rock song 
+
+Index and Thumb: next song
 
 # Training the Model
 ## Dataset
