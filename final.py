@@ -11,20 +11,21 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 # Add a button to start and stop the camera
 start_button = st.button("Start Camera")
 stop_button = st.button("Stop Camera")
+flag = False
 
 if start_button:
-    while cap.isOpened():
-        # Read frame from webcam
-        ret, frame = cap.read()
-        if not ret:
-            break
-            
-        # Flip the frame horizontally for a selfie-view display
-        frame = cv2.flip(frame, 1)
+    flag = True
+
+while flag:
+    # Read frame from webcam
+    ret, frame = cap.read()
+    if not ret:
+        break
         
-        # Display the frame in Streamlit
-        st.image(frame, channels="BGR")
-        
-if stop_button:
-    cap.release()
-    st.write("Camera stopped")
+    # Flip the frame horizontally for a selfie-view display
+    frame = cv2.flip(frame, 1)
+    
+    # Display the frame in Streamlit
+    st.image(frame, channels="BGR")
+    
+
