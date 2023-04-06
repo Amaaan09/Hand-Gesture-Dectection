@@ -2,7 +2,7 @@ import cv2
 import streamlit as st
 
 # Initialize OpenCV webcam capture outside of the function
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(-1)
 
 # Set webcam resolution
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
