@@ -1,101 +1,30 @@
-import os
-os.environ["QT_QPA_PLATFORM"] = "pyside2"
-os.environ["QT_PLUGIN_PATH"] = "C:/Users/mamaa/AppData/Local/Programs/Python/Python310/lib/site-packages/PySide2/plugins"
-
 import cv2
-import numpy as np
-import mediapipe as mp
-import tensorflow as tf
-from tensorflow.keras.models import load_model
 import streamlit as st
 
-# initialize mediapipe
-mpHands = mp.solutions.hands
-hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
-mpDraw = mp.solutions.drawing_utils
+# Initialize OpenCV webcam capture outside of the function
+cap = cv2.VideoCapture(0)
 
-# Load the gesture recognizer model
-model = load_model('mp_hand_gesture')
+# Set webcam resolution
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-# Load class names
-f = open('gesture.names', 'r')
-classNames = f.read().split('\n')
-f.close()
-print(classNames)
+# Add a button to start and stop the camera
+start_button = st.button("Start Camera")
+stop_button = st.button("Stop Camera")
 
-
-st.title("Face Recognition on Video using Streamlit")
-
-# Create a file uploader with specific file type
-file = st.file_uploader("Upload video", type=["mp4", "mov", "avi"])
-
-# # Display the video and face recognition results if a file is uploaded
-if file is not None:
-    # Read the contents of the file as bytes
-    video_bytes = file.read()
-
-    # Create a temporary file and write the contents of the uploaded file to it
-    with st.spinner('Saving file...'):
-        with open("temp.mp4", "wb") as f:
-            f.write(video_bytes)
-
-    # Create a VideoCapture object from the temporary file
-    cap = cv2.VideoCapture("temp.mp4")
-
-if file is None:
-    st.write("Please upload a video file")
-    pass
-
-while True:
-    # Read each frame from the webcam
-    _, frame = cap.read()
-
-    x, y, c = frame.shape
-
-    # Flip the frame vertically
-    frame = cv2.flip(frame, 1)
-    framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-    # Get hand landmark prediction
-    result = hands.process(framergb)
-
-    # print(result)
-    
-    className = ''
-
-    # post process the result
-    if result.multi_hand_landmarks:
-        landmarks = []
-        for handslms in result.multi_hand_landmarks:
-            for lm in handslms.landmark:
-                # print(id, lm)
-                lmx = int(lm.x * x)
-                lmy = int(lm.y * y)
-
-                landmarks.append([lmx, lmy])
-
-            # Drawing landmarks on frames
-            mpDraw.draw_landmarks(frame, handslms, mpHands.HAND_CONNECTIONS)
-
-            # Predict gesture
-            prediction = model.predict([landmarks], batch_size=1, verbose=0)
-            # print(prediction)
-            classID = np.argmax(prediction)
-            className = classNames[classID]
-            if className == '...':
-                className = ''
-
-    # show the prediction on the frame
-    cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 
-                   1, (0,0,255), 2, cv2.LINE_AA)
-
-    # Show the final output
-    cv2.imshow("Output", frame) 
-
-    if cv2.waitKey(1) == ord('q'):
-        break
-
-# release the webcam and destroy all active windows
-cap.release()
-
-cv2.destroyAllWindows()
+if start_button:
+    while cap.isOpened():
+        # Read frame from webcam
+        ret, frame = cap.read()
+        if not ret:
+            break
+            
+        # Flip the frame horizontally for a selfie-view display
+        frame = cv2.flip(frame, 1)
+        
+        # Display the frame in Streamlit
+        st.image(frame, channels="BGR")
+        
+if stop_button:
+    cap.release()
+    st.write("Camera stopped")
